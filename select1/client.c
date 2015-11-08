@@ -22,7 +22,7 @@
 #include <sys/select.h> // select
 
 
-#define BUFFER_SIZE      1024
+#define BUFFER_SIZE      512
 #define DEFAULT_PROTOCOL 0
 
 
