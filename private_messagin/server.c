@@ -199,6 +199,7 @@ int main(int argc, const char* argv[]) {
                     if ((nbytes = read_from_connected_client(fd, buffer)) < 1) {
                         memset(buffer, 0, BUFFER_SIZE);
                         printf("user: %s left\n", users[fd]);
+                        ascii_trie_delete(users[fd], user_names);
                         free(users[fd]);
                         users[fd] = NULL;
                         close(fd);
