@@ -118,6 +118,8 @@ int main(int argc, const char* argv[]) {
     
     while (1) {
         
+        memset(buffer, 0, BUFFER_SIZE);
+        
         read_fd_set = active_fd_set;
         
         if (select (FD_SETSIZE, &read_fd_set, NULL, NULL, NULL) < 0) {
@@ -156,7 +158,7 @@ int main(int argc, const char* argv[]) {
                     
                     assert(ntohs(clientname.sin_port) > 0);
                     
-                    fprintf (stderr,"Server: connect from host %s, port %ud.\n", inet_ntoa(clientname.sin_addr), ntohs(clientname.sin_port));
+                    fprintf (stderr,"Server: connect from host %s, port %d.\n", inet_ntoa(clientname.sin_addr), ntohs(clientname.sin_port));
                     
                     FD_SET (new_connfd, &active_fd_set);
                 
@@ -165,11 +167,15 @@ int main(int argc, const char* argv[]) {
 //                    connection on some existing client socket
                     ssize_t nbytes;
                     if ((nbytes = read_from_connected_client(fd, buffer)) < 1) {
+                        memset(buffer, 0, BUFFER_SIZE);
+                        fflush(stderr);
                         close(fd);
                         FD_CLR(fd, &active_fd_set);
                     } else {
+                        fflush(stderr);
                         fprintf (stderr, "Server: got message: %s", buffer);
-                        memset(buffer, 0, nbytes);
+                        fflush(stderr);
+                        memset(buffer, 0, BUFFER_SIZE);
                     }
                 }
             }
